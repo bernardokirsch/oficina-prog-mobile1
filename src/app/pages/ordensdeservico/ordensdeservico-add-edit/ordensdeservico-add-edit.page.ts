@@ -36,6 +36,7 @@ export class OrdensDeServicoAddEditPage implements OnInit {
   async ngOnInit() {
   }
 
+  /*
   async ionViewWillEnter() {
     const id = this.route.snapshot.paramMap.get('id');
     const clientes = await this.clientesService.getAll();
@@ -63,7 +64,7 @@ export class OrdensDeServicoAddEditPage implements OnInit {
       });
       this.ordemDeServico = this.osForm.value;
     }
-  }
+  } */
   selecionarDataEntrada() {
     if (!this.modoDeEdicao) {
       return;

@@ -42,7 +42,11 @@ const routes: Routes = [
   {
     path: 'ordensdeservico-add-edit/:id',
     loadChildren: () => import('./pages/ordensdeservico/ordensdeservico-add-edit/ordensdeservico-add-edit.module').then( m => m.OrdensDeServicoAddEditPageModule)
+  },  {
+    path: 'clientes-add-edit',
+    loadChildren: () => import('./pages/clientes/clientes-add-edit/clientes-add-edit.module').then( m => m.ClientesAddEditPageModule)
   },
+
 ];
 
 @NgModule({
