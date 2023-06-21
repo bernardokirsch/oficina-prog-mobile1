@@ -20,4 +20,23 @@ export class AlertService {
         });
         await alert.present();
     }
+
+    async presentConfirm(header: string, message: string, successFunction: () => void) {
+        const alert = await this.alertCtrl.create({
+            header,
+            message,
+            buttons: [{
+                text: 'Cancel', role: 'cancel',
+                handler: () => {
+                    console.log('Remoção cancelada');
+                }
+            },{
+                text: 'Manda brasa',
+                handler: () => {
+                    successFunction();
+                }
+            }]
+        });
+        await alert.present();
+    }
 }

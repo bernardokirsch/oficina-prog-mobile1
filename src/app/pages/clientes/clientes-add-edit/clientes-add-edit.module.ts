@@ -13,7 +13,8 @@ import { ClientesAddEditPage } from './clientes-add-edit.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ClientesAddEditPageRoutingModule
+    ClientesAddEditPageRoutingModule,
+    ReactiveFormsModule
   ],
   declarations: [ClientesAddEditPage]
 })
