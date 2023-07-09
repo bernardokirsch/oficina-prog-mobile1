@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrdensDeServicoService } from 'src/app/services/ordensdeservico.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { AlertService } from 'src/app/services/alert.service';
+import { SearchService } from 'src/app/services/search-service';
 
 @Component({
   templateUrl: './ordensDeServico-add-edit.page.html'
@@ -31,9 +32,12 @@ export class OrdensDeServicoAddEditPage implements OnInit {
     private toastService: ToastService,
     private alertService: AlertService,
     private router: Router,
-  ) { }
+    private searchService: SearchService, 
+  ) {
+    this.registrarServicoClienteSelecionado();
+   }
 
-  async ngOnInit() {
+  /* async ngOnInit() {
     this.ordemDeServico = {ordemdeservicoid: '', clienteid: '', veiculo: '', dataehoraentrada: new Date() };
     this.osForm = this.formBuilder.group({
       ordemdeservicoid: [this.ordemDeServico.ordemdeservicoid],
@@ -44,7 +48,7 @@ export class OrdensDeServicoAddEditPage implements OnInit {
       dataehoraentrada: [this.ordemDeServico.dataehoraentrada]
     });
     this.modoDeEdicao = true;
-  }
+  } */
 
   /*
   async ionViewWillEnter() {
@@ -132,10 +136,10 @@ export class OrdensDeServicoAddEditPage implements OnInit {
     this.modoDeEdicao = true;
   }
 
-  cancelarEdicao() {
+  /* cancelarEdicao() {
     this.osForm.setValue(this.ordemDeServico);
     this.modoDeEdicao = false;
-  }
+  } */
 
   /* async submit() {
     // Validação dos dados informados no formulário. Já trabalhamos com isso.
@@ -161,5 +165,43 @@ export class OrdensDeServicoAddEditPage implements OnInit {
     this.router.navigateByUrl('ordensdeservico-listagem');
   } */
  
+  private registrarServicoClienteSelecionado() {
+    this.searchService.getObservable().subscribe((data: Cliente) => {
+      this.nomeCliente = data.nome;
+      this.osForm.controls['clienteid'].setValue(data.clienteid);
+    });
+  }
 
+  public unsubscribeServices() {
+    this.searchService.getObservable().unsubscribe();
+  }
+
+  private createUpdateFormGroup() {
+    this.osForm = this.formBuilder.group({
+      ordemdeservicoid: [this.ordemDeServico.ordemdeservicoid],
+      clienteid: [this.ordemDeServico.clienteid, Validators.required],
+      veiculo: [this.ordemDeServico.veiculo, Validators.required],
+      dataentrada: [this.ordemDeServico.dataehoraentrada.toISOString(), Validators.required],
+      horaentrada: [this.ordemDeServico.dataehoraentrada.toLocaleTimeString('pt-BR'), Validators.required],
+      dataehoraentrada: ['']
+    });
+  }
+
+  async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id !== null && Number(id) !== -1) {
+        this.ordemDeServico = await this.ordensDeServicoService.getById(id);
+        const cliente = await this.clientesService.getById(this.ordemDeServico.clienteid);
+        this.nomeCliente = cliente.nome;
+    } else {
+        this.ordemDeServico = {ordemdeservicoid: '', clienteid: '', veiculo: '', dataehoraentrada: new Date() };
+        this.modoDeEdicao = true;
+    }
+    this.createUpdateFormGroup();
+  }
+
+  cancelarEdicao() {
+    this.createUpdateFormGroup();
+    this.modoDeEdicao = false;
+  }
 }

@@ -29,13 +29,17 @@ export class OrdensDeServicoListagemPage implements OnInit {
     this.ordensDeServico = await this.ordensdeservicoService.getAll();
   }
 
-  async removerAtendimento(ordemdeservico: OrdemDeServico) {
-    await this.ordensdeservicoService.removeById(ordemdeservico.ordemdeservicoid)
-    .then( async () => {
-      this.ordensDeServico = await this.ordensdeservicoService.getAll();
-      this.toastService.presentToast('Ordem de Serviço removida', 3000, 'top');
-      await this.slidingList.closeSlidingItems();
-    })
-    .catch( async (e) => await this.alertService.presentAlert('Falha', 'Remoção não foi executada', e, ['Ok']));
+  async removerAtendimento(ordemDeServico: OrdemDeServico) {
+    try {
+      const successFunction = async () => {
+        await this.ordensdeservicoService.removeById(ordemDeServico.ordemdeservicoid);
+        this.toastService.presentToast('Atendimento removido com sucesso', 3000, 'top');
+        this.slidingList.closeSlidingItems();
+        this.ordensDeServico = await this.ordensdeservicoService.getAll();
+      };
+      await this.alertService.presentConfirm('Remover Atendimento', 'Confirma remoção?', successFunction);
+    } catch (e: any) {
+      await this.alertService.presentAlert('Falha', 'Remoção não foi executada', e, ['Ok']);
+    }
   }
 }

@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="ordensdeservico-listagem"></ion-back-button>
+      <ion-back-button defaultHref="ordensdeservico-listagem" (click)="unsubscribeServices()"></ion-back-button>
     </ion-buttons>
     <ion-title>Ordem de Serviço</ion-title>
   </ion-toolbar>
@@ -22,7 +22,7 @@
   </ion-item-divider>
 
   <ng-container *ngIf="osForm">
-    <form [formGroup]="osForm" (submit)="submit()">
+    <form [formGroup]="osForm" > <!-- (submit)="submit()" -->
       <ion-item lines="none" [disabled]="!modoDeEdicao">
         <ion-label position="floating" class="label-input-title" style="margin-top: 10%;">Cliente</ion-label>
         <ion-grid no-padding>
